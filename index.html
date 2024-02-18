@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sample Site</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <style>
+    body { padding-top: 50px; }
+  </style>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    <div class="jumbotron">
+      <input type="text" class="inputFields" name="stockCode" placeholder="Enter stock code here">
+      <input type="text" class="inputFields" name="strikePrice" placeholder="Enter limit price here">
+      <input type="text" class="inputFields" name="price" placeholder="Enter  price here">
+      <input type="text" class="inputFields" name="quantity" placeholder="Enter  quantity here">
+      <input type="text" class="inputFields" name="expiryDate" placeholder="Enter  Expiry Date here">
+      <div style="display: flex; justify-content: space-between;" >
+        <button style="padding: 20px; border: 1px solid black; margin: 20px;" name="right" value="call" data-num="0" class="actionofcall">
+            Call
+        </button>
+        <button style="padding: 20px; border: 1px solid black; margin: 20px;" name="right" value="put" data-num="1" class="actionofcall">
+            Put
+        </button>
+        
+      </div>
+    </div>
+    <button onclick="submit()">Submit</button>
+    <button onclick="squareoff()">
+        Square Off
+    </button>
+    <div id="errorDetails"></div>
+  </div>
+  <script>
+    const stockFields = {};
+    function updateStockCode(e){
+        stockFields[e.target.name]=e.target.value;
+    }
+    function squareoff(){
+        axios.post('/trade', {...stockFields, type:'square'})
+  .then(function (response) {
+    console.log("response here", response);
+    const currentResponse = response?.data;
+   document.getElementById('errorDetails').innerText=typeof currentResponse === 'string' ?currentResponse:currentResponse?.Success?.message ||  currentResponse?.Error || 'Something went wrong';
+  })
+  .catch(function (error) {
+    console.log(error);
+    document.getElementById('errorDetails').innerText=error;
+  });
+    }
+    function submit(){
+        axios.post('/trade', {...stockFields, type:'options'})
+  .then(function (response) {
+    console.log("response here", response);
+    const currentResponse = response?.data;
+    document.getElementById('errorDetails').innerText=typeof currentResponse === 'string' ?currentResponse:currentResponse?.Success?.message ||  currentResponse?.Error || 'Something went wrong';
+  })
+  .catch(function (error) {
+    console.log(error);
+    document.getElementById('errorDetails').innerText=error;
+  });
+    }
+    function updateRightCode(e){
+        const actionofcall = document.querySelectorAll('.actionofcall');
+        actionofcall.forEach(acionpart=>acionpart.style="background:grey")
+        actionofcall[parseInt(e.target.dataset.num)].style="background:greenyellow"
+        stockFields[e.target.name]=e.target.value;
+        
+    }
+    const actionofcall = document.querySelectorAll('.actionofcall');
+    actionofcall.forEach(acionpart=>acionpart.addEventListener('click', updateRightCode))
+    const boxes = document.querySelectorAll('.inputFields');
+boxes.forEach(box => {
+  box.addEventListener('change', updateStockCode);
+});
+
+  </script>
+    
+</body>
+</html>
