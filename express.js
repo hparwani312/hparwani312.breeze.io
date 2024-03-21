@@ -18,9 +18,10 @@ app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, '/index.html'));
   });
   app.post('/trade', function(req, res) {
-    if(!req.body.stockCode){
-        res.send('Please enter stockcode');
-    }
+    // if(!req.body.stockCode){
+    //     res.send('Please enter stockcode');
+    //     return;
+    // }
     if(req.body.type==='options'){
         mainFile.optionsTrade(req.body).then((data)=>{
             res.send(data);
@@ -30,6 +31,19 @@ app.get('/', function(req, res) {
         })
     } else if(req.body.type==='square'){
        mainFile.squareOff(req.body).then((data)=>{
+            res.send(data);
+        }).catch((data)=>{
+            res.send(data);
+        })
+    } else if(req.body.type==='quotings') {
+        mainFile.subscribeFeedsLive(req.body).then((data)=>{
+            res.send(data);
+        }).catch((data)=>{
+            res.send(data);
+        })
+    }
+    else if(req.body.type==='quotingslive') {
+        mainFile.subscribeFeedsoneclick().then((data)=>{
             res.send(data);
         }).catch((data)=>{
             res.send(data);

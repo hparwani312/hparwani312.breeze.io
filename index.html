@@ -32,12 +32,40 @@
     <button onclick="squareoff()">
         Square Off
     </button>
+    <button onclick="getQuotings()">
+      Get Quotings
+  </button>
     <div id="errorDetails"></div>
   </div>
   <script>
     const stockFields = {};
     function updateStockCode(e){
         stockFields[e.target.name]=e.target.value;
+    }
+
+    axios.post('/trade', { type:'quotingslive'})
+  .then(function (response) {
+    console.log("response here first", response);
+    const currentResponse = response?.data;
+   document.getElementById('errorDetails').innerText=typeof currentResponse === 'string' ?currentResponse:currentResponse?.Success?.message ||  currentResponse?.Error || 'Something went wrong';
+  })
+  .catch(function (error) {
+    console.log(error);
+    document.getElementById('errorDetails').innerText=error;
+  });
+
+   axios.post('/trade', )
+    function getQuotings(){
+      axios.post('/trade', {...stockFields, type:'quotings'})
+  .then(function (response) {
+    console.log("response here", response);
+    const currentResponse = response?.data;
+   document.getElementById('errorDetails').innerText=typeof currentResponse === 'string' ?currentResponse:currentResponse?.Success?.message ||  currentResponse?.Error || 'Something went wrong';
+  })
+  .catch(function (error) {
+    console.log(error);
+    document.getElementById('errorDetails').innerText=error;
+  });
     }
     function squareoff(){
         axios.post('/trade', {...stockFields, type:'square'})

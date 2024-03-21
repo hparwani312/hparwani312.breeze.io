@@ -154,6 +154,7 @@ var BreezeConnect = function(params) {
             return;
         } 
 
+        console.log("I am here before emit");
         self.socketOrder.emit("join", symbols);
         self.socketOrder.on('stock', self.onMessageStrategy);
     };
@@ -293,9 +294,12 @@ var BreezeConnect = function(params) {
     }
 
     self.getStockTokenValue = function ({exchangeCode="", stockCode="", productType="", expiryDate="", strikePrice="", right="", getExchangeQuotes=true, getMarketDepth=true}) {
+        console.log("here i am once");
         if (getExchangeQuotes === false && getMarketDepth === false) {
+            console.log("here i am twice");
             self.subscribeException(exceptionMessage.QUOTE_DEPTH_EXCEPTION);
         } else {
+            console.log("here i am third");
             var exchangeCodeName = "";
             var exchangeCodeList={
                 "BSE":"1.",
@@ -313,12 +317,15 @@ var BreezeConnect = function(params) {
                 self.subscribeException(exceptionMessage.EMPTY_STOCK_CODE_EXCEPTION);
             }
             else {
+                console.log("here i am fourth", exchangeCode);
                 var tokenValue = false;
                 if(exchangeCode.toLowerCase() === "bse") {
                     var tokenValue = self.stockScriptDictList[0][stockCode] || false;
                 }
                 else if(exchangeCode.toLowerCase() === "nse"){
+                   
                     tokenValue = self.stockScriptDictList[1][stockCode] || false;
+                    
                 }
                 else {
                     if(expiryDate === "") {
@@ -353,17 +360,22 @@ var BreezeConnect = function(params) {
                         else if(productType.toLowerCase() === "options") {
                             self.subscribeException(exceptionMessage.RIGHT_EXCEPTION);
                         }
-                    }
+                    } 
+                   
+                    
                     if(exchangeCode.toLowerCase() === "ndx") {
-                        tokenValue = self.stockScriptDictList[2][contract_detail_value] || false;
+                        tokenValue = self.stockScriptDictList[2][contractDetailValue] || false;
                     }
                     else if(exchangeCode.toLowerCase() === "mcx") {
-                        tokenValue = self.stockScriptDictList[3][contract_detail_value] || false;
+                        tokenValue = self.stockScriptDictList[3][contractDetailValue] || false;
                     }
                     else if(exchangeCode.toLowerCase() === "nfo") {
-                        tokenValue = self.stockScriptDictList[4][contract_detail_value] || false;
+                        console.log("here i am fifth", contractDetailValue);
+                        tokenValue = self.stockScriptDictList[4][contractDetailValue] || false;
+                        console.log("here i am sixth", contractDetailValue);
                     }
                 }
+                console.log("tokenValue here reached",tokenValue);
                 if(tokenValue === false) {
                     self.subscribeException(exceptionMessage.STOCK_INVALID_EXCEPTION);
                 }
@@ -377,7 +389,7 @@ var BreezeConnect = function(params) {
                 if(getMarketDepth !== false) {
                     marketDepthTokenValue = exchangeCodeName + "2!" + tokenValue;
                 }
-
+                console.log("tokenValue here reached",exchangeQuotesTokenValue, marketDepthTokenValue);
                 return {"exch_quote_token":exchangeQuotesTokenValue,"market_depth_token": marketDepthTokenValue};
 
             }
@@ -766,7 +778,9 @@ var BreezeConnect = function(params) {
             else
                 interval = channelIntervalMap[interval];
         }
+        console.log("return object here before");
         if(self.socket){
+            console.log("return object here once");
             var return_object = {}
             if(getOrderNotification == true){
                 self.wsConnectOrder();
@@ -776,15 +790,17 @@ var BreezeConnect = function(params) {
 
             if(stockToken === roomName.ONE_CLICK_ROOM || stockToken === roomName.I_CLICK_2_GAIN)
             {
+                console.log("return object here second");
                 if(self.socketOrder == null)
                 {
                     self.connect({isOrder:true}); //for strategy streaming order socket would be used ie livefeeds.icicidirect.com
                 }
                 self.watchStrategy(stockToken);
+                console.log("return object here third");
                 return_object = self.socketConnectionResponse(responseMessage.ONE_CLICK_STRATEGY_SUBSCRIBED);
                 return return_object;
             }
-
+            console.log("return object here third");
             if(stockToken != ""){
                 if(interval!=""){
                     if(self.socketOHLCV==null){
@@ -796,11 +812,15 @@ var BreezeConnect = function(params) {
                     self.watch(stockToken)
                 return_object = self.socketConnectionResponse(responseMessage.STOCK_SUBSCRIBE_MESSAGE.format(stockToken));
             }
+            
             else if(getOrderNotification == true && exchangeCode == ""){
+                console.log("return object here fourth");
                 return return_object
             }
             else{
+                console.log("return object here fifth");
                 var tokenDict = self.getStockTokenValue({exchangeCode:exchangeCode, stockCode:stockCode, productType:productType, expiryDate:expiryDate, strikePrice:strikePrice, right:right, getExchangeQuotes:getExchangeQuotes, getMarketDepth:getMarketDepth});
+                console.log("token dict here", tokenDict);
                 if(interval!=""){
                     if(self.socketOHLCV==null){
                         self.connect({isOHLCV:true});
@@ -815,6 +835,7 @@ var BreezeConnect = function(params) {
                 }
                 return_object = self.socketConnectionResponse(responseMessage.STOCK_SUBSCRIBE_MESSAGE.format(stockCode));
             }
+            console.log("return object here", return_object);
             return return_object
         }
     }
