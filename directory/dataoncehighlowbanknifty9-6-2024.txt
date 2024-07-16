@@ -1,0 +1,6 @@
+buy here downtrend 51800 50 2024-07-09 09:47:00
+close here  downtrend 51800 40.75 2024-07-09 10:00:00
+total here 51800 -9.25 undefined
+buy here  uptrend 53200 48 2024-07-09 10:11:00
+close here uptrend 53200 37.75 2024-07-09 10:27:00
+total here 53200 -19.5 undefined

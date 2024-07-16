@@ -1,5 +1,6 @@
 var BreezeConnect = require('./breezeConnect').BreezeConnect;
 const axios = require('axios')
+const fs = require('fs');
 // intialize keys
 const API_KEY = "01944s0iT703549692A57L89_&2781@5";
 const API_SECRET = "7g5728B8r*Dn_0s710u09r3G4916e74K";
@@ -9,6 +10,15 @@ var breeze = new BreezeConnect({'appKey' : API_KEY});
 
 
 breeze.onTicks=(data)=>{
+    const date2 = (new Date()).getDate()
+    
+        const date3 = (new Date()).getMonth()
+    
+    const date4 = (new Date()).getFullYear();
+    const filepath = './directory/dataoncetickdata'+date2+"-"+date3+"-"+date4+".txt";
+        fs.writeFileSync(filepath, JSON.stringify(data), {
+            flag: "a+"
+          });
     console.log("tick data here", data);
 }
 const getCurrentMonthIn10 = (currentMonth)=>{
@@ -17,22 +27,22 @@ const getCurrentMonthIn10 = (currentMonth)=>{
     }
     return currentMonth+1;
 }
-function optionsTrade({stockCode, price, quantity, right, strikePrice, expiryDate, stoploss = ''}) {
+function optionsTrade({stockCode, price, quantity, right, strikePrice, expiryDate, stoploss = '', product='', actionType = 'buy', token: tokenFromUser}) {
+0
     return new Promise((res,rej)=>{
-    axios.get('https://www.googleapis.com/drive/v3/files/1Ou447lmilqiY4nZnCWJ3KUtt5i_sjw-u?key=AIzaSyCnX1X5xZYpye9y5cGTeLYwBDppG6MttAI&alt=media').
-            then((data)=> {
-                console.log("data here", data.data);
-                breeze.generateSession(API_SECRET,data.data).then(function(resp){
+        const token = "38271614";
+        const takeTrade = (tokenToTrade)=>{
+            breeze.generateSession(API_SECRET,tokenToTrade).then(function(resp){
 
                 // call function containing api calls
                 breeze.placeOrder({
                   "stockCode": stockCode,
                   "exchangeCode": "NFO",
-                  "product": "options",
+                  "product": product,
                   "orderType": "limit",
                   "price": price,
                   "stoploss":stoploss,
-                  "action": "buy",
+                  "action": actionType,
                   "quantity": quantity,
                   "validity":"DAY",
                   expiryDate:expiryDate,
@@ -45,11 +55,22 @@ function optionsTrade({stockCode, price, quantity, right, strikePrice, expiryDat
               }).catch(function(err){
                   console.log("error here once", err);
                   rej(err);
-              })}).catch((err)=>{
+              })
+        }
+        if(tokenFromUser) {
+            takeTrade(tokenFromUser);
+            
+        } else {
+        axios.get('https://www.googleapis.com/drive/v3/files/1Ou447lmilqiY4nZnCWJ3KUtt5i_sjw-u?key=AIzaSyCnX1X5xZYpye9y5cGTeLYwBDppG6MttAI&alt=media').
+            then((data)=> {
+                takeTrade(data.data);
+                }).catch((err)=>{
                 rej(err);
             })
+        }
+        });
        
-});
+// });
 
 
 }
@@ -58,9 +79,10 @@ function subscribeFeedsoneclick() {
 
   
     return new Promise((res,rej)=>{
+        // const token = "38271614";
         axios.get('https://www.googleapis.com/drive/v3/files/1Ou447lmilqiY4nZnCWJ3KUtt5i_sjw-u?key=AIzaSyCnX1X5xZYpye9y5cGTeLYwBDppG6MttAI&alt=media').
             then((data)=> {
-                console.log("data here", data.data);
+                // console.log("data here", data.data);
             breeze.generateSession(API_SECRET,data.data).then(function(resp){
               
                 breeze.connect({});
@@ -91,9 +113,10 @@ function subscribeFeedsLive({stockCode, price, quantity, right, strikePrice, exp
     const month = currentDate.getMonth();
     const year = currentDate.getFullYear();
     return new Promise((res,rej)=>{
+        // const token = "38271614";
         axios.get('https://www.googleapis.com/drive/v3/files/1Ou447lmilqiY4nZnCWJ3KUtt5i_sjw-u?key=AIzaSyCnX1X5xZYpye9y5cGTeLYwBDppG6MttAI&alt=media').
             then((data)=> {
-                console.log("data here", data.data);
+        //         console.log("data here", data.data);
             breeze.generateSession(API_SECRET,data.data).then(function(resp){
               
                 breeze.connect({});
@@ -127,7 +150,7 @@ function subscribeFeedsLive({stockCode, price, quantity, right, strikePrice, exp
     })
 
 }
-function squareOff({stockCode, price, quantity, right, strikePrice, expiryDate}) {
+function squareOff({stockCode, price, quantity, right, strikePrice, expiryDate, stoploss = '', product='', actionType = 'buy', token: tokenFromUser}) {
 
     const currentDate = new Date(expiryDate);
     const date = currentDate.getDate();
@@ -135,39 +158,46 @@ function squareOff({stockCode, price, quantity, right, strikePrice, expiryDate})
     const year = currentDate.getFullYear();
 
     return new Promise((res,rej)=>{
+        // const token = "38271614";
+
+        const takeTrade = (tokenToTrade)=>{
+            breeze.generateSession(API_SECRET,tokenToTrade).then(function(resp){
+
+                // call function containing api calls
+                breeze.placeOrder({
+                  "stockCode": stockCode,
+                  "exchangeCode": "NFO",
+                  "product": product,
+                  "orderType": "limit",
+                  "price": price,
+                  "stoploss":stoploss,
+                  "action": actionType,
+                  "quantity": quantity,
+                  "validity":"DAY",
+                  expiryDate:expiryDate,
+                  "right": right,
+                  "strikePrice":strikePrice,
+              }).then(function(resp){console.log("data here once", resp);res(resp);}).catch(function(err){
+                  console.log("error here once", err);
+                  rej(err);
+              })
+              }).catch(function(err){
+                  console.log("error here once", err);
+                  rej(err);
+              })
+        }
+        if(tokenFromUser) {
+            takeTrade(tokenFromUser);
+        } else{
     axios.get('https://www.googleapis.com/drive/v3/files/1Ou447lmilqiY4nZnCWJ3KUtt5i_sjw-u?key=AIzaSyCnX1X5xZYpye9y5cGTeLYwBDppG6MttAI&alt=media').
         then((data)=> {
-            console.log("data here", data.data);
-        breeze.generateSession(API_SECRET,data.data).then(function(resp){
-          
-
-            breeze.squareOff({
-                "sourceFlag": "",
-                "stockCode": stockCode,
-                "exchangeCode": "NFO",
-                "quantity": quantity,
-                "price": price,
-                "action": "sell",
-                "right": right,
-                "orderType": "limit",
-                "stoploss": "0",
-                "disclosedQuantity": "0",
-                "validity": "Day",
-                expiryDate:`${year}-${getCurrentMonthIn10(month)}-${date}`,
-                "strikePrice":strikePrice,
-                "productType": "options"
-            }).then((data)=>{
-                console.log("data here once", data);
-                res(data);
-            }).catch(function(err){
-                rej(err);
-             })
-        }).catch(function(err){
-           rej(err);
-        });
+            takeTrade(data.data);
+    //         console.log("data here", data.data);
+       
     }).catch((err)=>{
         rej(err);
     })
+}
 })
     
     

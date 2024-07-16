@@ -62,10 +62,10 @@ async function BankNifty(fixStrikePriceCE, fixStrikePricePE){
         "stockCode": "CNXBAN",
         "exchangeCode": "NFO",
         "productType": "options",
-        "fromDate":"2024-03-20 10:43:00",
-          "toDate":"2024-03-20 10:44:00",
+        "fromDate":"2024-06-24 15:20:00",
+          "toDate":"2024-06-24 15:20:00",
           "interval":"1minute",
-          "expiryDate":"2024-03-27T07:00:00.000Z",
+          "expiryDate":"2024-63-26T07:00:00.000Z",
         "right": "put",
         "strikePrice":"45400",
     })

@@ -1,0 +1,37 @@
+buy here  uptrend 53600 55 2024-07-01 09:30:00
+close here uptrend 53600 49.2 2024-07-01 09:34:00
+total here 53600 -5.799999999999997 undefined
+buy here  uptrend 53800 60 2024-07-01 09:42:00
+close here uptrend 53800 46.5 2024-07-01 09:50:00
+total here 53800 -19.299999999999997 undefined
+buy here  uptrend 53600 55 2024-07-01 09:30:00
+close here uptrend 53600 49.2 2024-07-01 09:34:00
+total here 53600 -5.799999999999997 undefined
+buy here  uptrend 53800 60 2024-07-01 09:42:00
+close here uptrend 53800 46.5 2024-07-01 09:50:00
+total here 53800 -19.299999999999997 undefined
+buy here downtrend 51300 58 2024-07-01 10:47:00
+close here  downtrend 51300 40.95 2024-07-01 10:53:00
+total here 51300 -36.349999999999994 undefined
+buy here  uptrend 53600 57 2024-07-01 11:17:00
+close here uptrend 53600 59.2 2024-07-01 11:32:00
+total here 53600 -34.14999999999999 undefined
+buy here  uptrend 53800 50 2024-07-01 12:25:00
+close here uptrend 53800 39.45 2024-07-01 12:31:00
+total here 53800 -44.69999999999999 undefined
+buy here  uptrend 53800 44 2024-07-01 13:37:00
+close here uptrend 53800 35.55 2024-07-01 13:49:00
+total here 53800 -53.14999999999999 undefined
+buy here downtrend 51600 54 2024-07-01 14:41:00
+close here  downtrend 51600 45.6 2024-07-01 14:47:00
+total here 51600 -61.54999999999999 undefined
+buy here  uptrend 53600 51 2024-07-01 15:08:00
+close here uptrend 53600 45.15 2024-07-01 15:15:00
+total here 53600 -67.39999999999999 undefined
+buy here downtrend 51600 48 2024-07-01 15:28:00
+
+
+
+
+
+

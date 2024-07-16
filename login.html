@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sample Site</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <style>
+    body { padding-top: 50px; }
+  </style>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    // window.addEventListener("load", ()=>{
+        const hostname = window.location.hostname;
+        const port = window.location.port;
+        const protocol =  window.location.protocol;
+        console.log(`href here ${protocol}${hostname}${port ?':'+port:''}/trade`);
+        window.location.href = `${protocol}//${hostname}${port ?':'+port:''}/trade`;
+    // })
+
+  </script>
+</head>
+<body>
+
+  <div class="container">
+    <div class="jumbotron">
+      <input type="text" class="inputFields" name="username" placeholder="Enter username">
+      <input type="text" class="inputFields" name="password" placeholder="Enter password">
+      <!-- <input type="text" class="inputFields" name="fromPrice" placeholder="Enter  Start Price here">
+      <input type="text" class="inputFields" name="toPrice" placeholder="Enter  End Price here"> -->
+  
+    <button onclick="signup()">Sign Up</button>
+    <button onclick="login()">
+        Login
+    </button>
+   
+    <div id="errorDetails"></div>
+  </div>
+  <script>
+    
+    function signup(){
+        axios.post('/trade', {...stockFields, type:'options'})
+  .then(function (response) {
+    console.log("response here", currentResponse.Error, currentResponse?.Success?.message);
+    const currentResponse = response?.data;
+    if(typeof currentResponse === 'string' && currentResponse.startsWith("Could not authenticate")){
+      document.getElementById('token').style.display = 'block';
+
+   } else {
+      document.getElementById('token').style.display = 'none';
+    }
+   
+    document.getElementById('errorDetails').innerText=typeof currentResponse === 'string' ?currentResponse:currentResponse?.Success?.message ||  currentResponse?.Error || 'Something went wrong';
+  })
+  .catch(function (error) {
+    console.log(error);
+    document.getElementById('errorDetails').innerText=error;
+  });
+    }
+    function login(){
+        axios.post('/trade', {...stockFields, type:'options'})
+  .then(function (response) {
+    console.log("response here", currentResponse.Error, currentResponse?.Success?.message);
+    const currentResponse = response?.data;
+    if(typeof currentResponse === 'string' && currentResponse.startsWith("Could not authenticate")){
+      document.getElementById('token').style.display = 'block';
+
+   } else {
+      document.getElementById('token').style.display = 'none';
+    }
+   
+    document.getElementById('errorDetails').innerText=typeof currentResponse === 'string' ?currentResponse:currentResponse?.Success?.message ||  currentResponse?.Error || 'Something went wrong';
+  })
+  .catch(function (error) {
+    console.log(error);
+    document.getElementById('errorDetails').innerText=error;
+  });
+    }
+
+
+  </script>
+    
+</body>
+</html>

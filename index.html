@@ -18,6 +18,10 @@
       <input type="text" class="inputFields" name="price" placeholder="Enter  price here">
       <input type="text" class="inputFields" name="quantity" placeholder="Enter  quantity here">
       <input type="text" class="inputFields" name="expiryDate" placeholder="Enter  Expiry Date here">
+      <input type="text" class="inputFields" name="stoploss" placeholder="Enter  stop loss here">
+      <input type="text" class="inputFields" name="token" id="token" style="display: none;" placeholder="Enter  token here">
+      <!-- <input type="text" class="inputFields" name="fromPrice" placeholder="Enter  Start Price here">
+      <input type="text" class="inputFields" name="toPrice" placeholder="Enter  End Price here"> -->
       <div style="display: flex; justify-content: space-between;" >
         <button style="padding: 20px; border: 1px solid black; margin: 20px;" name="right" value="call" data-num="0" class="actionofcall">
             Call
@@ -25,6 +29,30 @@
         <button style="padding: 20px; border: 1px solid black; margin: 20px;" name="right" value="put" data-num="1" class="actionofcall">
             Put
         </button>
+        
+      </div>
+      <div style="display: flex; justify-content: space-between;" >
+        <button style="padding: 20px; border: 1px solid black; margin: 20px;" name="product" value="futures" data-num="0" class="actionofproduct">
+            Futures
+        </button>
+        <button style="padding: 20px; border: 1px solid black; margin: 20px;" name="product" value="options" data-num="1" class="actionofproduct">
+            Options
+        </button>
+        <button style="padding: 20px; border: 1px solid black; margin: 20px;" name="product" value="futureplus" data-num="2" class="actionofproduct">
+          FuturePlus
+      </button>
+      <button style="padding: 20px; border: 1px solid black; margin: 20px;" name="product" value="optionplus" data-num="3" class="actionofproduct">
+        OptionPlus
+    </button>
+  </div>
+    <div style="display: flex; justify-content: space-between;" >
+      <button style="padding: 20px; border: 1px solid black; margin: 20px;" name="actionType" value="buy" data-num="0" class="actionofaction">
+          Buy
+      </button>
+      <button style="padding: 20px; border: 1px solid black; margin: 20px;" name="actionType" value="sell" data-num="1" class="actionofaction">
+          Sell
+      </button>
+      
         
       </div>
     </div>
@@ -35,6 +63,9 @@
     <button onclick="getQuotings()">
       Get Quotings
   </button>
+  <button onclick="starthighlowtrade()">
+    Start High Low Trade
+</button>
     <div id="errorDetails"></div>
   </div>
   <script>
@@ -47,6 +78,14 @@
   .then(function (response) {
     console.log("response here first", response);
     const currentResponse = response?.data;
+
+    if(typeof currentResponse === 'string' && currentResponse.startsWith("Could not authenticate")){
+      document.getElementById('token').style.display = 'block';
+
+   } else {
+      document.getElementById('token').style.display = 'none';
+    }
+    
    document.getElementById('errorDetails').innerText=typeof currentResponse === 'string' ?currentResponse:currentResponse?.Success?.message ||  currentResponse?.Error || 'Something went wrong';
   })
   .catch(function (error) {
@@ -54,7 +93,6 @@
     document.getElementById('errorDetails').innerText=error;
   });
 
-   axios.post('/trade', )
     function getQuotings(){
       axios.post('/trade', {...stockFields, type:'quotings'})
   .then(function (response) {
@@ -67,11 +105,32 @@
     document.getElementById('errorDetails').innerText=error;
   });
     }
+
+    function starthighlowtrade(){
+      axios.post('/starthighlowbanknifty', {...stockFields})
+  .then(function (response) {
+    console.log("response here", response);
+    const currentResponse = response?.data;
+   document.getElementById('errorDetails').innerText="started";
+  })
+  .catch(function (error) {
+    console.log(error);
+    document.getElementById('errorDetails').innerText=error;
+  });
+    }
+
     function squareoff(){
         axios.post('/trade', {...stockFields, type:'square'})
   .then(function (response) {
     console.log("response here", response);
     const currentResponse = response?.data;
+
+    if(typeof currentResponse === 'string' && currentResponse.startsWith("Could not authenticate")){
+      document.getElementById('token').style.display = 'block';
+
+   } else {
+      document.getElementById('token').style.display = 'none';
+    }
    document.getElementById('errorDetails').innerText=typeof currentResponse === 'string' ?currentResponse:currentResponse?.Success?.message ||  currentResponse?.Error || 'Something went wrong';
   })
   .catch(function (error) {
@@ -82,8 +141,16 @@
     function submit(){
         axios.post('/trade', {...stockFields, type:'options'})
   .then(function (response) {
-    console.log("response here", response);
+    
     const currentResponse = response?.data;
+    console.log("response here", currentResponse.Error, currentResponse?.Success?.message);
+    if(typeof currentResponse === 'string' && currentResponse.startsWith("Could not authenticate")){
+      document.getElementById('token').style.display = 'block';
+
+   } else {
+      document.getElementById('token').style.display = 'none';
+    }
+   
     document.getElementById('errorDetails').innerText=typeof currentResponse === 'string' ?currentResponse:currentResponse?.Success?.message ||  currentResponse?.Error || 'Something went wrong';
   })
   .catch(function (error) {
@@ -92,14 +159,21 @@
   });
     }
     function updateRightCode(e){
-        const actionofcall = document.querySelectorAll('.actionofcall');
-        actionofcall.forEach(acionpart=>acionpart.style="background:grey")
+        const actionofcall = document.querySelectorAll(`.${this.action}`);
+        actionofcall.forEach(acionpart=>acionpart.style="background:light-dark(rgba(239, 239, 239, 0.3)")
         actionofcall[parseInt(e.target.dataset.num)].style="background:greenyellow"
         stockFields[e.target.name]=e.target.value;
         
     }
     const actionofcall = document.querySelectorAll('.actionofcall');
-    actionofcall.forEach(acionpart=>acionpart.addEventListener('click', updateRightCode))
+    actionofcall.forEach(acionpart=>acionpart.addEventListener('click', updateRightCode.bind({action:"actionofcall"})))
+
+
+    const actionofproduct = document.querySelectorAll('.actionofproduct');
+    actionofproduct.forEach(acionpart=>acionpart.addEventListener('click',  updateRightCode.bind({action:"actionofproduct"})))
+
+    const actionofaction = document.querySelectorAll('.actionofaction');
+    actionofaction.forEach(acionpart=>acionpart.addEventListener('click', updateRightCode.bind({action:"actionofaction"})))
     const boxes = document.querySelectorAll('.inputFields');
 boxes.forEach(box => {
   box.addEventListener('change', updateStockCode);
