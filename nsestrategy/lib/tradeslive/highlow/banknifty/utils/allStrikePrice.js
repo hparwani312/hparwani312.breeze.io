@@ -20,7 +20,7 @@ async function BankNifty(){
         "method": "GET"
       });
     const actualData = await data.json();
-    return actualData?.records?.strikePrices;
+    return {strikePrices: actualData?.records?.strikePrices, expiryDates:actualData?.records?.expiryDates};
     }catch(e){
         console.log("error here", e);
         return new Promise((res,rej)=>{

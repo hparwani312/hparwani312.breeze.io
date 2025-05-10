@@ -16,6 +16,7 @@ const getHrms = (m)=>{
 }
 
 let allStrikePrices = [];
+let expiryDateInput =null;
 let intervalHere;
 let retryCountForGettingPrice = 0;
     let startPrice = 0;
@@ -68,17 +69,22 @@ let retryCountForGettingPrice = 0;
             flag: "a+"
           });
     }
-function starttrade(from = 45, to = 55, expiryDateInput="16-Jul-2024"){
+function starttrade(from = 25, to = 35, expiryDateInputNow){
     
-    const expiryDate = moment(expiryDateInput, "DD-MMM-YYYY").format('YYYY-MM-DD');
+    
 
-   
+     expiryDateInput = expiryDateInputNow;
+    
     async function starttrading () {
   
         const date = new Date();
     if(!allStrikePrices?.length){
-        allStrikePrices = await allStrikePrice();
+        const {strikePrices, expiryDates} = await allStrikePrice();
+        allStrikePrices = strikePrices;
+        expiryDateInput = expiryDates[0];
+
     }
+    const expiryDate = moment(expiryDateInput, "DD-MMM-YYYY").format('YYYY-MM-DD');
      const fromDate = `${date.getFullYear()}-${getMon(date.getMonth())}-${getHrms(date.getDate())} ${getHrms(date.getHours())}:${getHrms(date.getMinutes()-1)}:00`;
       const toDate =  fromDate;
     // const fromDate = "2024-07-02 09:15:00"

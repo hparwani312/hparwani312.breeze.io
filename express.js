@@ -83,6 +83,10 @@ app.get('/', function(req, res) {
     res.redirect('/login');;
   });
 
+  app.get('/interprepfast', function(req, res) {
+    res.sendFile(path.join(__dirname, '/interprepfast.html'));
+  });
+
 
 app.get('/login', function(req, res) {
     res.sendFile(path.join(__dirname, '/login.html'));
@@ -125,6 +129,11 @@ app.get('/trade', function(req, res) {
     }
   });
   
+  app.get('/check', function(req, res){
+    const filepath2 = './directory/dataonce111.txt';
+    const filePath4Data = fs.existsSync(filepath2) ? fs.readFileSync(filepath2,{ encoding: 'utf8', flag: 'r' }):"";
+    res.send("CheckOnce "+filePath4Data);
+  })
   app.get("/tickdata", function(req, res){
     const date2 = (new Date()).getDate()
 
@@ -158,6 +167,8 @@ const date4 = (new Date()).getFullYear();
     const filePath4Data = fs.existsSync(filepath2) ? fs.readFileSync(filepath2,{ encoding: 'utf8', flag: 'r' }):"";
     res.send("HighLowBankNifty "+filePath4Data);
   })
+
+  app.use(express.static('directory'))
   app.get('/nifsel', function(req, res) {
     const date2 = (new Date()).getDate()
 
@@ -216,6 +227,25 @@ const date4 = (new Date()).getFullYear();
 }
 );
 
+app.get('/bankniftycont', function(req, res) {
+    const date2 = (new Date()).getDate()
+
+    const date3 = (new Date()).getMonth()
+
+const date4 = (new Date()).getFullYear();
+    // const filepath1 = './directory/dataoncemidcpnifty'+date2+"-"+date3+"-"+date4+".txt";
+    // const filepath2 = './directory/dataoncenifty'+date2+"-"+date3+"-"+date4+".txt";
+    // const filepath3 = './directory/dataoncefinnifty'+date2+"-"+date3+"-"+date4+".txt";
+     const filepath4 = './directory/dataoncebankniftycont'+date2+"-"+date3+"-"+date4+".txt";
+    // const filePath1Data = fs.existsSync(filepath1) ? fs.readFileSync(filepath1,{ encoding: 'utf8', flag: 'r' }):"";
+    // const filePath2Data = fs.existsSync(filepath2) ? fs.readFileSync(filepath2,{ encoding: 'utf8', flag: 'r' }):"";
+    // const filePath3Data = fs.existsSync(filepath3) ? fs.readFileSync(filepath3,{ encoding: 'utf8', flag: 'r' }):"";
+    const filePath4Data = fs.existsSync(filepath4) ? fs.readFileSync(filepath4,{ encoding: 'utf8', flag: 'r' }):"";
+    res.send("BankNiftyCont "+filePath4Data);
+    // +"\n\n\n"+"Nifty "+filePath2Data+"\n\n\n"+"FinNifty "+filePath3Data+"\n\n\n"+"MidCap "+filePath1Data);
+
+}
+);
 
 app.post('/starthighlowbanknifty', function(req, res) {
     

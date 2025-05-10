@@ -29,7 +29,8 @@
     "connect"
   ],
   "scripts": {
-    "start": "node express.js"
+    "start": "node express.js",
+    "startAll": "node all.js"
   },
   "engines": {
     "node": "20.x"

@@ -59,6 +59,11 @@ function increasingContinously() {
         const hours = (new Date()).getHours()
         const minutes = (new Date()).getMinutes()
 
+        const day = (new Date()).getDay();
+        if(day===0 || day===6){
+            return;
+        }
+
         if(hours>=9 && hours<=15){
         if(hours===9 && minutes<15){
             return
@@ -67,14 +72,17 @@ function increasingContinously() {
         
         const {CE, PE, dataExists} = await niftyprice(fixStrikePriceCE, fixStrikePricePE);
         if(hours===15 && minutes>1) {
-            if(sellordered){
+            console.log("data exists", dataExists, CE, PE)
+            if(sellordered && dataExists){
                             if(orderType === "PE"){
-                                total = total + orderedPrice -  PE.lastPrice;
+                                //total = total + orderedPrice -  PE.lastPrice;
+                                total+=  PE.lastPrice;
                                 sellanoption(PE.strikePrice, PE.lastPrice, total);
                                 sellordered = false;
                                 orderType = ""
                             } else if(orderType === "CE"){
-                                total = total + orderedPrice -  CE.lastPrice;
+                                //total = total + orderedPrice -  CE.lastPrice;
+                                total+=  CE.lastPrice;
                                 sellanoption(CE.strikePrice, CE.lastPrice, total);
                                 sellordered = false;
                                 orderType = ""

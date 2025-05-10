@@ -66,6 +66,7 @@ const date2 = (new Date()).getDate()
     return breezeOrderDaata;
     }catch(e){
         console.error("error here",e);
+        firstKey=null;
         return {};
     }
 }

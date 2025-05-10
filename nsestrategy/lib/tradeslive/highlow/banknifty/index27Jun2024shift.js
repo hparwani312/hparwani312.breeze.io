@@ -68,7 +68,7 @@ let retryCountForGettingPrice = 0;
             flag: "a+"
           });
     }
-function starttrade(from = 20, to = 30, expiryDateInput="16-Jul-2024"){
+function starttrade(from = 40, to = 50, expiryDateInput="24-Jul-2024"){
     
     const expiryDate = moment(expiryDateInput, "DD-MMM-YYYY").format('YYYY-MM-DD');
 
@@ -81,8 +81,8 @@ function starttrade(from = 20, to = 30, expiryDateInput="16-Jul-2024"){
     }
     //  const fromDate = `${date.getFullYear()}-${getMon(date.getMonth())}-${getHrms(date.getDate())} ${getHrms(date.getHours())}:${getHrms(date.getMinutes()-1)}:00`;
     //   const toDate =  fromDate;
-    const fromDate = "2024-07-15 09:15:00"
-    const toDate = "2024-07-15 15:30:00";
+    const fromDate = "2024-07-22 09:15:00"
+    const toDate = "2024-07-22 15:30:00";
        const {Success=[]}= await historyData({
             interval: "1minute",
             fromDate:fromDate,

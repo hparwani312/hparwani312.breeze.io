@@ -57,9 +57,14 @@ function increasingContinously() {
 }
  function checkIfCanBuy(){
     setInterval(async ()=>{
+        
         const hours = (new Date()).getHours()
         const minutes = (new Date()).getMinutes()
 
+        const day = (new Date()).getDay();
+        if(day===0 || day===6){
+            return;
+        }
         if(hours>=9 && hours<=15){
         if(hours===9 && minutes<15){
             return
@@ -69,14 +74,17 @@ function increasingContinously() {
         const {CE, PE, dataExists} = await bankniftyprice(fixStrikePriceCE, fixStrikePricePE);
 
         if(hours===15 && minutes>1) {
-            if(sellordered){
+            console.log("data exists", dataExists, CE, PE)
+            if(sellordered && dataExists){
                             if(orderType === "PE"){
-                                total = total + orderedPrice -  PE.lastPrice;
+                                //total = total + orderedPrice -  PE.lastPrice;
+                                total+=  PE.lastPrice;
                                 sellanoption(PE.strikePrice, PE.lastPrice, total);
                                 sellordered = false;
                                 orderType = ""
                             } else if(orderType === "CE"){
-                                total = total + orderedPrice -  CE.lastPrice;
+                                //total = total + orderedPrice -  CE.lastPrice;
+                                total+=  CE.lastPrice;
                                 sellanoption(CE.strikePrice, CE.lastPrice, total);
                                 sellordered = false;
                                 orderType = ""
@@ -89,13 +97,13 @@ function increasingContinously() {
                     if(!twominuteintervalCE || ((Date.now()-twominuteintervalCE)>=60*2*1000) || strikePriceCE!=CE.strikePrice){
                         if(CE.strikePrice>strikePriceCE &&!buyordered && !sellordered){
                             ordertobuyanoption(CE.strikePrice, CE.lastPrice+Math.floor((CE.strikePrice-strikePriceCE)/200));
-                            // fixStrikePriceCE=CE.strikePrice;
-                            // // twominuteinterval=Date.now();
-                            // // CElastPrice = CE.lastPrice;
-                            // // PElastPrice = PE.lastPrice;
-                            // orderedPrice = CE.lastPrice+Math.floor((CE.strikePrice-strikePriceCE)/200);
-                            // orderType = "CE";
-                            // buyordered = true;
+                            fixStrikePriceCE=CE.strikePrice;
+                            // twominuteinterval=Date.now();
+                            // CElastPrice = CE.lastPrice;
+                            // PElastPrice = PE.lastPrice;
+                            orderedPrice = CE.lastPrice+Math.floor((CE.strikePrice-strikePriceCE)/200);
+                            orderType = "CE";
+                            buyordered = true;
                             twominuteintervalCE=Date.now();
                             CElastPrice = CE.lastPrice;
                             strikePriceCE=CE.strikePrice;
@@ -109,13 +117,13 @@ function increasingContinously() {
                     if(!twominuteintervalPE || ((Date.now()-twominuteintervalPE)>=60*2*1000) || strikePricePE!=PE.strikePrice){
                         if(PE.strikePrice<strikePricePE &&!buyordered && !sellordered){
                             ordertobuyanoption(PE.strikePrice, PE.lastPrice+Math.floor((strikePricePE-PE.strikePrice)/200));
-                            // fixStrikePricePE=PE.strikePrice;
-                            // // twominuteinterval=Date.now();
-                            // // CElastPrice = CE.lastPrice;
-                            // // PElastPrice = PE.lastPrice;
-                            // orderedPrice = PE.lastPrice+Math.floor((strikePricePE-PE.strikePrice)/200);
-                            // orderType = "PE";
-                            // buyordered = true;
+                            fixStrikePricePE=PE.strikePrice;
+                            // twominuteinterval=Date.now();
+                            // CElastPrice = CE.lastPrice;
+                            // PElastPrice = PE.lastPrice;
+                            orderedPrice = PE.lastPrice+Math.floor((strikePricePE-PE.strikePrice)/200);
+                            orderType = "PE";
+                            buyordered = true;
                             twominuteintervalPE=Date.now();
                         PElastPrice = PE.lastPrice;
                         strikePricePE=PE.strikePrice;
@@ -143,22 +151,22 @@ function increasingContinously() {
                         if(!buyordered && !sellordered){
                         if(CElastPrice-CE.lastPrice>3){
                             ordertobuyanoption(CE.strikePrice, CE.lastPrice);
-                            // fixStrikePriceCE=CE.strikePrice;
-                            // // twominuteinterval=Date.now();
-                            // // CElastPrice = CE.lastPrice;
-                            // // PElastPrice = PE.lastPrice;
-                            // orderedPrice = CE.lastPrice;
-                            // orderType = "CE";
-                            // buyordered = true;
+                            fixStrikePriceCE=CE.strikePrice;
+                            // twominuteinterval=Date.now();
+                            // CElastPrice = CE.lastPrice;
+                            // PElastPrice = PE.lastPrice;
+                            orderedPrice = CE.lastPrice;
+                            orderType = "CE";
+                            buyordered = true;
                         } else if(PElastPrice-PE.lastPrice>3){
                             ordertobuyanoption(PE.strikePrice, PE.lastPrice);
-                            // fixStrikePricePE=PE.strikePrice;
-                            // // twominuteinterval=Date.now();
-                            // // CElastPrice = CE.lastPrice;
-                            // // PElastPrice = PE.lastPrice;
-                            // orderedPrice = PE.lastPrice;
-                            // orderType = "PE";
-                            // buyordered = true
+                            fixStrikePricePE=PE.strikePrice;
+                            // twominuteinterval=Date.now();
+                            // CElastPrice = CE.lastPrice;
+                            // PElastPrice = PE.lastPrice;
+                            orderedPrice = PE.lastPrice;
+                            orderType = "PE";
+                            buyordered = true
                         }
                     } else if(buyordered){
                         if(orderType === "PE"){
