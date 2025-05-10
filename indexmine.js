@@ -2,26 +2,33 @@ var BreezeConnect = require('./breezeConnect').BreezeConnect;
 const axios = require('axios')
 const fs = require('fs');
 // intialize keys
-let API_KEY = "";
-let API_SECRET = "";
+const API_KEY = "01944s0iT703549692A57L89_&2781@5";
+const API_SECRET = "7g5728B8r*Dn_0s710u09r3G4916e74K";
 // const API_SESSION = "34890413";
 
-let breeze = null
+const breeze = new BreezeConnect({'appKey' : API_KEY});
 
 
-
+breeze.onTicks=(data)=>{
+    const date2 = (new Date()).getDate()
+    
+        const date3 = (new Date()).getMonth()
+    
+    const date4 = (new Date()).getFullYear();
+    const filepath = './directory/dataoncetickdata'+date2+"-"+date3+"-"+date4+".txt";
+        fs.writeFileSync(filepath, JSON.stringify(data), {
+            flag: "a+"
+          });
+    console.log("tick data here", data);
+}
 const getCurrentMonthIn10 = (currentMonth)=>{
     if(currentMonth<10){
         return `0${currentMonth+1}`;
     }
     return currentMonth+1;
 }
-function optionsTrade({stockCode, price, quantity, right, strikePrice, expiryDate, stoploss = '', product='', actionType = 'buy', token: tokenFromUser, apiKey, apiSecret}) {
-if(!breeze){
-    breeze = new BreezeConnect({'appKey' : apiKey});
-    API_KEY = apiKey;
-    API_SECRET = apiSecret;
-}
+function optionsTrade({stockCode, price, quantity, right, strikePrice, expiryDate, stoploss = '', product='', actionType = 'buy', token: tokenFromUser}) {
+0
     return new Promise((res,rej)=>{
         const token = "38271614";
         const takeTrade = (tokenToTrade)=>{
@@ -70,7 +77,7 @@ if(!breeze){
 
 function subscribeFeedsoneclick() {
 
-  if(breeze){
+  
     return new Promise((res,rej)=>{
         // const token = "38271614";
         axios.get('https://www.googleapis.com/drive/v3/files/1Ou447lmilqiY4nZnCWJ3KUtt5i_sjw-u?key=AIzaSyCnX1X5xZYpye9y5cGTeLYwBDppG6MttAI&alt=media').
@@ -96,8 +103,6 @@ function subscribeFeedsoneclick() {
             rej(err);
         })
     })
-}
-return new Promise((res, rej)=>{res()});
 
 }
 
@@ -107,7 +112,6 @@ function subscribeFeedsLive({stockCode, price, quantity, right, strikePrice, exp
     const date = currentDate.getDate();
     const month = currentDate.getMonth();
     const year = currentDate.getFullYear();
-    if(breeze){
     return new Promise((res,rej)=>{
         // const token = "38271614";
         axios.get('https://www.googleapis.com/drive/v3/files/1Ou447lmilqiY4nZnCWJ3KUtt5i_sjw-u?key=AIzaSyCnX1X5xZYpye9y5cGTeLYwBDppG6MttAI&alt=media').
@@ -144,17 +148,10 @@ function subscribeFeedsLive({stockCode, price, quantity, right, strikePrice, exp
             rej(err);
         })
     })
-}
-return new Promise((res, rej)=>{res()});
 
 }
-function squareOff({stockCode, price, quantity, right, strikePrice, expiryDate, stoploss = '', product='', actionType = 'buy', token: tokenFromUser, apiKey, apiSecret}) {
+function squareOff({stockCode, price, quantity, right, strikePrice, expiryDate, stoploss = '', product='', actionType = 'buy', token: tokenFromUser}) {
 
-    if(!breeze){
-        breeze = new BreezeConnect({'appKey' : apiKey});
-        API_KEY = apiKey;
-        API_SECRET = apiSecret;
-    }
     const currentDate = new Date(expiryDate);
     const date = currentDate.getDate();
     const month = currentDate.getMonth();

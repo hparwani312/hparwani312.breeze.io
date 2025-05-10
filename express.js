@@ -12,6 +12,7 @@ const firebaseSaveData1 = require('./FirebaseIC');
 
 
 const mainFile = require('./index')
+const mainFileMine = require('./indexmine')
 const app = express()
 const port = 3000
 
@@ -126,6 +127,44 @@ app.get('/trade', function(req, res) {
     }
     else if(req.body.type==='quotingslive') {
         mainFile.subscribeFeedsoneclick().then((data)=>{
+            res.send(data);
+        }).catch((data)=>{
+            res.send(data);
+        })
+    }
+  });
+
+
+  app.get('/trademine', function(req, res) {
+    res.sendFile(path.join(__dirname, '/indexmine.html'));
+  });
+  app.post('/trademine', function(req, res) {
+    // if(!req.body.stockCode){
+    //     res.send('Please enter stockcode');
+    //     return;
+    // }
+    if(req.body.type==='options'){
+        mainFileMine.optionsTrade(req.body).then((data)=>{
+            res.send(data);
+        }).catch((data)=>{
+            console.log("data here once", data);
+            res.send(data);
+        })
+    } else if(req.body.type==='square'){
+        mainFileMine.squareOff(req.body).then((data)=>{
+            res.send(data);
+        }).catch((data)=>{
+            res.send(data);
+        })
+    } else if(req.body.type==='quotings') {
+        mainFileMine.subscribeFeedsLive(req.body).then((data)=>{
+            res.send(data);
+        }).catch((data)=>{
+            res.send(data);
+        })
+    }
+    else if(req.body.type==='quotingslive') {
+        mainFileMine.subscribeFeedsoneclick().then((data)=>{
             res.send(data);
         }).catch((data)=>{
             res.send(data);

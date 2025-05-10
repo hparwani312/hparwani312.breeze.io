@@ -24,9 +24,7 @@
       <input type="text" class="inputFields" name="quantity" placeholder="Enter  quantity here">
       <input type="text" class="inputFields" name="expiryDate" placeholder="Enter  Expiry Date here">
       <input type="text" class="inputFields" name="stoploss" placeholder="Enter  stop loss here">
-      <input type="text" class="inputFields" name="token" id="token" placeholder="Enter  token here">
-      <input type="text" class="inputFields" name="apiKey" id="apiKey" placeholder="Enter api key here">
-      <input type="text" class="inputFields" name="apiSecret" id="apiSecret" placeholder="Enter api secret here">
+      <input type="text" class="inputFields" name="token" id="token" style="display: none;" placeholder="Enter  token here">
       <!-- <input type="text" class="inputFields" name="fromPrice" placeholder="Enter  Start Price here">
       <input type="text" class="inputFields" name="toPrice" placeholder="Enter  End Price here"> -->
       <div style="display: flex; justify-content: space-between;" >
@@ -67,6 +65,12 @@
     <button onclick="squareoff()">
         Square Off
     </button>
+    <button onclick="getQuotings()">
+      Get Quotings
+  </button>
+  <button onclick="starthighlowtrade()">
+    Start High Low Trade
+</button>
     <div id="errorDetails"></div>
     <div class="steps">
       <a href="/stepsforbreeze" target="_blank">
@@ -81,8 +85,27 @@
         stockFields[e.target.name]=e.target.value;
     }
 
+    axios.post('/trademine', { type:'quotingslive'})
+  .then(function (response) {
+    console.log("response here first", response);
+    const currentResponse = response?.data;
+
+    if(typeof currentResponse === 'string' && currentResponse.startsWith("Could not authenticate")){
+      document.getElementById('token').style.display = 'block';
+
+   } else {
+      document.getElementById('token').style.display = 'none';
+    }
+    
+   document.getElementById('errorDetails').innerText=typeof currentResponse === 'string' ?currentResponse:currentResponse?.Success?.message ||  currentResponse?.Error || 'Something went wrong';
+  })
+  .catch(function (error) {
+    console.log(error);
+    document.getElementById('errorDetails').innerText=error;
+  });
+
     function getQuotings(){
-      axios.post('/trade', {...stockFields, type:'quotings'})
+      axios.post('/trademine', {...stockFields, type:'quotings'})
   .then(function (response) {
     console.log("response here", response);
     const currentResponse = response?.data;
@@ -108,7 +131,7 @@
     }
 
     function squareoff(){
-        axios.post('/trade', {...stockFields, type:'square'})
+        axios.post('/trademine', {...stockFields, type:'square'})
   .then(function (response) {
     console.log("response here", response);
     const currentResponse = response?.data;
@@ -127,7 +150,7 @@
   });
     }
     function submit(){
-        axios.post('/trade', {...stockFields, type:'options'})
+        axios.post('/trademine', {...stockFields, type:'options'})
   .then(function (response) {
     
     const currentResponse = response?.data;
