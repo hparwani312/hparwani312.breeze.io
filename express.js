@@ -28,6 +28,10 @@ app.use((req, res, next) => {
     next()
   })
 
+app.get('/stepsforbreeze',function(req, res){
+    res.sendFile(path.join(__dirname, '/steps.html'));
+});
+
 app.post('/getimagechunks', async function(req, res){
     const doc  = await firebaseSaveData.getChunks(req.body);
     res.send(doc);
