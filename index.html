@@ -6,6 +6,11 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <style>
     body { padding-top: 50px; }
+    .steps{
+      display: flex;
+      gap: 16px;
+      flex-direction: column;
+    }
   </style>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
@@ -67,6 +72,12 @@
     Start High Low Trade
 </button>
     <div id="errorDetails"></div>
+    <div class="steps">
+      <a href="/stepsforbreeze" target="_blank">
+        Steps for setting up token from Breeze Account
+      </a>
+      <span>Just put the token provide stock code according to the platform and take trade</span>
+    </div>
   </div>
   <script>
     const stockFields = {};
