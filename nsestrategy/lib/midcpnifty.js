@@ -73,6 +73,7 @@ function increasingContinously() {
         
         const {CE, PE, dataExists} = await midcpniftyprice(fixStrikePriceCE, fixStrikePricePE);
         if(hours===15 && minutes>1) {
+            makeAnEntry("dataexists", CE.strikePrice, PE.strikePrice);
             console.log("data exists", dataExists, CE, PE)
             if(sellordered && dataExists){
                             if(orderType === "PE"){
@@ -227,7 +228,7 @@ function increasingContinously() {
                     }
     }
 }
-    }, 5000)
+    }, 60000)
 }
 
 checkIfCanBuy()

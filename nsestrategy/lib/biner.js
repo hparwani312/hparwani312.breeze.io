@@ -10,7 +10,7 @@ function main(){
     flag: "a+"
   })
 }
-  setTimeout(()=>{
+  setInterval(()=>{
      currentDate = new Date();
      currentDay = currentDate.getDay();
     if(currentDay!==day){
